@@ -59,3 +59,19 @@ def actualizar_usuario(usuario_id: int, datos: Usuario):
         session.refresh(usuario)
 
         return usuario
+        
+@router.delete("/{usuario_id}")
+def eliminar_usuario(usuario_id: int):
+    with Session(engine) as session:
+        usuario = session.get(Usuario, usuario_id)
+
+        if not usuario:
+            raise HTTPException(
+                status_code=404,
+                detail="Usuario no encontrado"
+            )
+
+        session.delete(usuario)
+        session.commit()
+
+        return {"mensaje": "Usuario eliminado correctamente"}
